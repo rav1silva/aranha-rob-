@@ -1,62 +1,91 @@
 #include <Servo.h>
 
-// Definindo as portas dos servos
-#define SERVO2_PORT 2
-#define SERVO1_PORT 3
-#define SERVO3_PORT 4
-#define SERVO4_PORT 5
-#define SERVO6_PORT 6
-#define SERVO5_PORT 7
-#define SERVO8_PORT 8
-#define SERVO7_PORT 9
-
-// Criando variáveis Servo para cada motor
-Servo servo2;
-Servo servo1;
-Servo servo3;
-Servo servo4;
-Servo servo6;
-Servo servo5;
-Servo servo8;
-Servo servo7;
+// Definindo os objetos servo
+Servo frontServo1;
+Servo frontServo2;
+Servo backServo1;
+Servo backServo2;
+Servo armServo;
+Servo eyeServo;
 
 void setup() {
-  Serial.begin(9600);
+  // Inicializando os servos nos pinos correspondentes
+  frontServo1.attach(2);
+  frontServo2.attach(3);
+  backServo1.attach(4);
+  backServo2.attach(5);
+  armServo.attach(6);
+  eyeServo.attach(7);
 
-  // Anexando os servos às portas correspondentes
-  servo2.attach(SERVO2_PORT);
-  servo1.attach(SERVO1_PORT);
-  servo3.attach(SERVO3_PORT);
-  servo4.attach(SERVO4_PORT);
-  servo6.attach(SERVO6_PORT);
-  servo5.attach(SERVO5_PORT);
-  servo8.attach(SERVO8_PORT);
-  servo7.attach(SERVO7_PORT);
+  // Sequência inicial de piscar os olhos
+  piscarOlhos();
 
-  // Iniciando todos os servos na posição 0
-  servo2.write(0);
-  servo1.write(0);
-  servo3.write(0);
-  servo4.write(0);
-  servo6.write(0);
-  servo5.write(0);
-  servo8.write(0);
-  servo7.write(0);
+  // Movimentos iniciais
+  moverFrente(5000);   // Ir para frente por 5 segundos
+  moverTras(5000);     // Ir para trás por 5 segundos
+  virarEsquerda(5000); // Virar à esquerda por 5 segundos
+  virarDireita(5000);  // Virar à direita por 5 segundos
 }
 
 void loop() {
-  // Movendo todos os servos para a posição 90
-  servo2.write(90);
-  servo1.write(90);
-  servo3.write(90);
-  servo4.write(90);
-  servo6.write(90);
-  servo5.write(90);
-  servo8.write(90);
-  servo7.write(90);
+  // Coloque aqui o que o robô deve fazer no loop principal após os movimentos iniciais
+}
 
-  // Aguarde um pouco para garantir que todos os servos se movam para a posição
-  delay(1000);
+// Função para piscar os olhos
+void piscarOlhos() {
+  for (int i = 0; i < 3; i++) {
+    eyeServo.write(0);
+    delay(200);
+    eyeServo.write(180);
+    delay(200);
+  }
+  eyeServo.write(90);
+}
 
-  // Você pode adicionar código adicional aqui para outras operações
+// Função para mover para frente
+void moverFrente(int tempo) {
+  frontServo1.write(0);
+  frontServo2.write(180);
+  backServo1.write(0);
+  backServo2.write(180);
+  delay(tempo);
+  pararMovimento();
+}
+
+// Função para mover para trás
+void moverTras(int tempo) {
+  frontServo1.write(180);
+  frontServo2.write(0);
+  backServo1.write(180);
+  backServo2.write(0);
+  delay(tempo);
+  pararMovimento();
+}
+
+// Função para virar à esquerda
+void virarEsquerda(int tempo) {
+  frontServo1.write(180);
+  frontServo2.write(180);
+  backServo1.write(0);
+  backServo2.write(0);
+  delay(tempo);
+  pararMovimento();
+}
+
+// Função para virar à direita
+void virarDireita(int tempo) {
+  frontServo1.write(0);
+  frontServo2.write(0);
+  backServo1.write(180);
+  backServo2.write(180);
+  delay(tempo);
+  pararMovimento();
+}
+
+// Função para parar o movimento
+void pararMovimento() {
+  frontServo1.write(90);
+  frontServo2.write(90);
+  backServo1.write(90);
+  backServo2.write(90);
 }
